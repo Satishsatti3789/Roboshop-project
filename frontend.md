@@ -55,3 +55,56 @@ Ensure you replace the localhost with the actual ip address of those component s
 
 **Restart Nginx Service to load the changes of the configuration.**
 systemctl restart nginx 
+
+
+
+
+
+
+
+
+
+
+
+http {
+  # Ensure this directive is within the http block
+  proxy_http_version 1.1;
+
+  server {
+    # Other server directives here...
+
+    location /images/ {
+      expires 5s;
+      root /usr/share/nginx/html;
+      try_files $uri /images/placeholder.jpg;
+    }
+
+    location /api/catalogue/ {
+      proxy_pass http://localhost:8080/;
+    }
+
+    location /api/user/ {
+      proxy_pass http://localhost:8080/;
+    }
+
+    location /api/cart/ {
+      proxy_pass http://localhost:8080/;
+    }
+
+    location /api/shipping/ {
+      proxy_pass http://localhost:8080/;
+    }
+
+    location /api/payment/ {
+      proxy_pass http://localhost:8080/;
+    }
+
+    location /health {
+      stub_status on;
+      access_log off;
+    }
+
+    # Additional server configuration here...
+  }
+}
+
